@@ -7,6 +7,7 @@ const DEFAULT_ITEM_REGISTER = {name: 'Flash', power: 'Speed', id: 1};
 
 describe('Handler heroes', () => {
 	before(async () => {
+		await database.delete();
 		await database.create(DEFAULT_ITEM_REGISTER);
 	});
 
@@ -24,5 +25,11 @@ describe('Handler heroes', () => {
 		const result = await database.create(expected);
 		const [actual] = await database.find(expected.id);
 		deepEqual(actual, expected);
+	});
+
+	it('Must delete a hero by id', async () => {
+		const expected = true;
+		const result = await database.delete(DEFAULT_ITEM_REGISTER.id);
+		deepEqual(result, expected);
 	});
 });

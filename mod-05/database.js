@@ -39,6 +39,24 @@ class Database {
 		const result = this.write(finalData);
 		return result;
 	}
+
+	async delete(id) {
+		if (!id) {
+			return await this.write([]);
+		}
+		
+		const data = await this.find();
+		// const dataFiltered = data.filter(item => Number(item.id) !== Number(id));
+		// return await this.write(dataFiltered);
+		
+		const index = data.findIndex(item => parseInt(item.id) === parseInt(id));
+		if (index === -1) {
+			throw Error('Hero not found!');
+		}
+
+		data.splice(index, 1);
+		return await this.write(data);
+	}
 }
 
 module.exports = new Database();
