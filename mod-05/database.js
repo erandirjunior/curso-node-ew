@@ -57,6 +57,24 @@ class Database {
 		data.splice(index, 1);
 		return await this.write(data);
 	}
+
+	async update(id, data) {
+		const allData = await this.getData();
+		const index = allData.findIndex(item => parseInt(item.id) === parseInt(id));
+		if (index === -1) {
+			throw Error('Hero not found!');
+		}
+		const current = allData[index];
+		const heroUpdate = {
+			...current,
+			...data
+		}
+		allData.splice(index, 1);
+		return await this.write([
+			...allData,
+			data
+		]);
+	}
 }
 
 module.exports = new Database();
