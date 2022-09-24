@@ -14,6 +14,10 @@ const MOCK_HERO_UPDATER = {
 describe('Postgres Strategy', function() {
 	this.timeout(Infinity);
 
+	this.beforeAll(async () => {
+		await context.delete();
+	});
+
 	it('Check connection', async () => {
 		const result = await context.isConnected();
 		assert.equal(result, true);
@@ -44,5 +48,11 @@ describe('Postgres Strategy', function() {
 		
 		assert.deepEqual(response, 1);
 		assert.deepEqual(hero, MOCK_HERO_UPDATER)
-	})
+	});
+
+	it('Delete', async () => {
+		const [item] = await context.find({ name: MOCK_HERO_UPDATER.name });
+		const result = await context.delete(item.id);
+		assert.deepEqual(result, 1);
+	});
 });
