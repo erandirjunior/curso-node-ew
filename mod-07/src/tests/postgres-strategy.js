@@ -6,6 +6,10 @@ const MOCK_HERO_REGISTER = {
 	name: 'Spider-Man',
 	power: 'Agility'
 };
+const MOCK_HERO_UPDATER = {
+	name: 'HULK',
+	power: 'Force'
+};
 
 describe('Postgres Strategy', function() {
 	this.timeout(Infinity);
@@ -26,4 +30,19 @@ describe('Postgres Strategy', function() {
 		delete result.id;
 		assert.deepEqual(result, MOCK_HERO_REGISTER);
 	});
+
+	it('Update', async () => {
+		const [result] = await context.find({ name: MOCK_HERO_REGISTER.name });
+		const heroUpdate = {
+			...result,
+			...MOCK_HERO_UPDATER
+		};
+		
+		const [response] = await context.update(result.id, heroUpdate);
+		const [hero] = await context.find({id: result.id});
+		delete hero.id;
+		
+		assert.deepEqual(response, 1);
+		assert.deepEqual(hero, MOCK_HERO_UPDATER)
+	})
 });

@@ -67,6 +67,12 @@ class Postgres extends ICrud {
 	async find(where = {}) {
 		return await this._heroes.findAll({where, raw: true})
 	}
+
+	async update(id, data) {
+		delete data.id;
+		return await this._heroes.update(data, {where: {id}})
+
+	}
 }
 
 module.exports = Postgres;
