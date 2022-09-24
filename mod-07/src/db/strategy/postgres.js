@@ -63,6 +63,10 @@ class Postgres extends ICrud {
 		const { dataValues } = await this._heroes.create(item);
 		return dataValues;
 	}
+
+	async find(where = {}) {
+		return await this._heroes.findAll({where, raw: true})
+	}
 }
 
 module.exports = Postgres;

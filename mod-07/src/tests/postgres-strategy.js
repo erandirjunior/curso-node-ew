@@ -20,4 +20,10 @@ describe('Postgres Strategy', function() {
 		delete result.id;
 		assert.deepEqual(result, MOCK_HERO_REGISTER);
 	});
+
+	it('Find', async () => {
+		const [result] = await context.find({ name: MOCK_HERO_REGISTER.name });
+		delete result.id;
+		assert.deepEqual(result, MOCK_HERO_REGISTER);
+	});
 });
