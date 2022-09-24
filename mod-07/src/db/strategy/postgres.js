@@ -59,8 +59,9 @@ class Postgres extends ICrud {
 		}
 	}
 
-	create(item) {
-		console.log('Item created in postgres')
+	async create(item) {
+		const { dataValues } = await this._heroes.create(item);
+		return dataValues;
 	}
 }
 
