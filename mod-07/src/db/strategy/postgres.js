@@ -19,7 +19,8 @@ class Postgres extends ICrud {
 				host: 'db',
 				dialect: 'postgres',
 				quoteIdentifiers: false,
-				operatorAliases: false
+				operatorAliases: false,
+				logging: false
 			}
 		);
 	}
