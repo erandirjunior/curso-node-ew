@@ -91,6 +91,10 @@ class Mongo extends ICrud {
 	find(query, skip = 0, limit = 10) {
 		return this._heroes.find(query).skip(skip).limit(limit);
 	}
+
+	update(id, item) {
+		return this._heroes.updateOne({_id: id}, {$set: item});
+	}
 }
 
 module.exports = Mongo;
