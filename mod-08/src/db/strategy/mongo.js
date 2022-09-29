@@ -87,6 +87,10 @@ class Mongo extends ICrud {
 	create(item) {
 		return this._heroes.create(item);
 	}
+
+	find(query, skip = 0, limit = 10) {
+		return this._heroes.find(query).skip(skip).limit(limit);
+	}
 }
 
 module.exports = Mongo;

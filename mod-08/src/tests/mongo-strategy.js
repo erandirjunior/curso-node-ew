@@ -15,7 +15,11 @@ describe('Mongo Strategy', function() {
 
 	it('Register', async () => {
 		const {name, power} = await context.create(MOCK_HERO_REGISTER);
+		assert.deepEqual({name, power}, MOCK_HERO_REGISTER);
+	});
 
+	it('Find', async () => {
+		const [{name, power}] = await context.find({name: MOCK_HERO_REGISTER.name});
 		assert.deepEqual({name, power}, MOCK_HERO_REGISTER);
 	});
 });

@@ -10,8 +10,8 @@ class ContextStrategy extends ICrud {
 		return this._database.create(item);
 	}
 
-	find(query) {
-		return this._database.find(query);
+	find(query, skip, limit) {
+		return this._database.find(query, skip, limit);
 	}
 
 	update(id, item) {
