@@ -49,11 +49,6 @@ class Mongo extends ICrud {
 	}
 
 	_defineModel() {
-		console.log(Mongoose.model.heroes)
-		if (this._heroes) {
-			return;
-		}
-
 		const heroesSchema = new Mongoose.Schema({
 			name: {
 				type: String,
@@ -89,8 +84,8 @@ class Mongo extends ICrud {
 		return STATUS[this._connection.readyState];
 	}
 
-	async create(item) {
-		return await model.create(item);
+	create(item) {
+		return this._heroes.create(item);
 	}
 }
 
