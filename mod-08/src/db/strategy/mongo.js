@@ -95,6 +95,11 @@ class Mongo extends ICrud {
 	update(id, item) {
 		return this._heroes.updateOne({_id: id}, {$set: item});
 	}
+
+	delete(id) {
+		const query = id ? {_id: id} : {}
+		return this._heroes.deleteMany(query);
+	}
 }
 
 module.exports = Mongo;

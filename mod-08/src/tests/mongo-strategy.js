@@ -12,6 +12,10 @@ const MOCK_HERO_UPDATER = {
 };
 
 describe('Mongo Strategy', function() {
+	this.beforeAll(async () => {
+		await context.delete();
+	});
+
 	it('Check connection', async () => {
 		const result = await context.isConnected();
 		assert.equal(result, 'Connected');
@@ -31,5 +35,11 @@ describe('Mongo Strategy', function() {
 		const [hero] = await context.find({name: MOCK_HERO_REGISTER.name}, 0, 1);
 		const result = await context.update(hero._id, MOCK_HERO_UPDATER);
 		assert.deepEqual(result.modifiedCount, 1);
+	});
+
+	it('Delete', async () => {
+		const [hero] = await context.find({name: MOCK_HERO_UPDATER.name}, 0, 1);
+		const result = await context.delete(hero._id);
+		assert.deepEqual(result.deletedCount, 1);
 	});
 });
