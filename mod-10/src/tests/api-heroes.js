@@ -47,7 +47,7 @@ describe.only('Api Routes', function() {
 			url: `/heroes?skip=0a&limit=${limit}`
 		});
 		const statusCode = result.statusCode;
-		assert.deepEqual(statusCode, 500);
+		assert.deepEqual(statusCode, 400);
 	});
 
 	it('List /heroes -> must return only data with specific name', async () => {
