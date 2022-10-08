@@ -1,5 +1,9 @@
 const BaseRoute = require('./base/base-route');
 const Joi = require('joi');
+const failAction = (request, h, err) => {
+    request.log('error', err);
+    throw err;
+};
 
 module.exports = class HeroRoutes extends BaseRoute {
 	constructor(context) {
@@ -22,10 +26,7 @@ module.exports = class HeroRoutes extends BaseRoute {
 						limit: Joi.number().integer().default(10),
 						name: Joi.string().min(3).max(100)
 					}),
-					failAction: (request, h, err) => {
-				        request.log('error', err);
-				        throw err;
-				    },
+					failAction
 				}
 			},
 			handler: (request, headers) => {
@@ -44,6 +45,35 @@ module.exports = class HeroRoutes extends BaseRoute {
 					}*/
 
 					return this.context.find(query, skip, limit);
+				} catch (e) {
+					console.log(e);
+					return headers.response('Internal Error').code(500);
+				}
+			}
+		}
+	}
+
+	create() {
+		return {
+			path: '/heroes',
+			method: 'POST',
+			options: {
+				validate: {
+					payload: Joi.object({
+						name: Joi.string().min(3).max(100),
+						power: Joi.string().min(3).max(100)
+					}),
+					failAction
+				}
+			},
+			handler: async (request, headers) => {
+				try {
+					const {name, power} = request.payload;
+					const result = await this.context.create({name, power});
+					return {
+						message: 'Hero registered with success!',
+						id: result._id
+					};
 				} catch (e) {
 					console.log(e);
 					return headers.response('Internal Error').code(500);

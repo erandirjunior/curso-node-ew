@@ -1,6 +1,10 @@
 const assert = require('assert');
 const api = require('./../api');
 let app = {};
+const MOCK_HERO_REGISTER = {
+	name: 'Batman',
+	power: 'Money'
+};
 
 describe.only('Api Routes', function() {
 	this.beforeAll(async () => {
@@ -64,5 +68,22 @@ describe.only('Api Routes', function() {
 		assert.deepEqual(statusCode, 200);
 
 		assert.ok(data.length === 2);
+	});
+
+	it('Create /heroes', async () => {
+		const name = 'Spider-Man'
+		const result = await app.inject({
+			method: 'POST',
+			url: `/heroes`,
+			payload: MOCK_HERO_REGISTER
+		});
+
+
+		const {message, id} = JSON.parse(result.payload);
+		const statusCode = result.statusCode;
+
+		assert.deepEqual(message, 'Hero registered with success!');
+		assert.notStrictEqual(id, undefined)
+		assert.ok(statusCode === 200);
 	});
 });
