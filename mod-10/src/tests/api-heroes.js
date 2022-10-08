@@ -86,4 +86,50 @@ describe.only('Api Routes', function() {
 		assert.notStrictEqual(id, undefined)
 		assert.ok(statusCode === 200);
 	});
+
+	it('Update /heroes', async () => {
+		const name = 'Batman'
+		let result = await app.inject({
+			method: 'POST',
+			url: `/heroes`,
+			payload: MOCK_HERO_REGISTER
+		});
+
+		const {id} = JSON.parse(result.payload);
+
+		const expected = {
+			power: 'Force'
+		};
+
+		result = await app.inject({
+			method: 'PATCH',
+			url: `/heroes/${id}`,
+			payload: expected
+		});
+
+		const statusCode = result.statusCode;
+		const data = JSON.parse(result.payload);
+
+		assert.ok(statusCode === 200);
+		assert.deepEqual(data.message, 'Hero updated!');
+	});
+
+	it('Update fail /heroes', async () => {
+		const expected = {
+			power: 'Force'
+		};
+
+		const id = '6340aa5e8a48ab9c9ab49caa';
+		result = await app.inject({
+			method: 'PATCH',
+			url: `/heroes/${id}`,
+			payload: expected
+		});
+
+		const statusCode = result.statusCode;
+		const data = JSON.parse(result.payload);
+
+		assert.ok(statusCode === 200);
+		assert.deepEqual(data.message, 'Update hero failed!');
+	});
 });

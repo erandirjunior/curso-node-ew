@@ -60,8 +60,8 @@ module.exports = class HeroRoutes extends BaseRoute {
 			options: {
 				validate: {
 					payload: Joi.object({
-						name: Joi.string().min(3).max(100),
-						power: Joi.string().min(3).max(100)
+						name: Joi.string().min(3).max(100).required(),
+						power: Joi.string().min(3).max(100).required()
 					}),
 					failAction
 				}
@@ -77,6 +77,47 @@ module.exports = class HeroRoutes extends BaseRoute {
 				} catch (e) {
 					console.log(e);
 					return headers.response('Internal Error').code(500);
+				}
+			}
+		}
+	}
+
+	update() {
+		return {
+			path: '/heroes/{id}',
+			method: 'PATCH',
+			options: {
+				validate: {
+					params: Joi.object({
+						id: Joi.required()
+					}),
+					payload: Joi.object({
+						name: Joi.string().min(3).max(100),
+						power: Joi.string().min(3).max(100)
+					}),
+					failAction
+				}
+			},
+			handler: async (req, h) => {
+				try {
+					const {id} = req.params;
+					const {payload} = req;
+					const dataString = JSON.stringify(payload);
+					const data = JSON.parse(dataString);
+					const result = await this.context.update(id, data);
+
+					if (result.modifiedCount !== 1) {
+						return {
+							message: 'Update hero failed!'
+						};
+					}
+
+					return {
+						message: 'Hero updated!'
+					};
+				} catch (e) {
+					console.log(e)
+					return h.response('Internal Error').code(500);
 				}
 			}
 		}
