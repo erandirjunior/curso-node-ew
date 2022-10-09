@@ -1,5 +1,6 @@
 const BaseRoute = require('./base/base-route');
 const Joi = require('joi');
+const Boom = require('@hapi/boom');
 const failAction = (request, h, err) => {
     request.log('error', err);
     throw err;
@@ -47,7 +48,7 @@ module.exports = class HeroRoutes extends BaseRoute {
 					return this.context.find(query, skip, limit);
 				} catch (e) {
 					console.log(e);
-					return headers.response('Internal Error').code(500);
+					return Boom.internal();
 				}
 			}
 		}
@@ -76,7 +77,7 @@ module.exports = class HeroRoutes extends BaseRoute {
 					};
 				} catch (e) {
 					console.log(e);
-					return headers.response('Internal Error').code(500);
+					return Boom.internal();
 				}
 			}
 		}
@@ -117,9 +118,62 @@ module.exports = class HeroRoutes extends BaseRoute {
 					};
 				} catch (e) {
 					console.log(e)
-					return h.response('Internal Error').code(500);
+					return Boom.internal();
 				}
 			}
 		}
+	}
+
+	delete() {
+		return {
+			path: '/heroes/{id}',
+			method: 'DELETE',
+			options: {
+				validate: {
+					params: Joi.object({
+						id: Joi.required()
+					}),
+					failAction
+				}
+			},
+			handler: async (req, h) => {
+				try {
+					const {id} = req.params;
+					const result = await this.context.delete(id);
+
+					if (result.deletedCount !== 1) {
+						return {
+							message: 'Delete hero failed!'
+						};
+					}
+
+					return {
+						message: 'Hero deleted!'
+					};
+				} catch (e) {
+					console.log(e)
+					return Boom.internal();
+				}
+			}
+		};
+	}
+
+	deleteAll() {
+		return {
+			path: '/heroes',
+			method: 'DELETE',
+			handler: async (req, h) => {
+				try {
+					const result = await this.context.delete();
+
+					return {
+						message: 'Heroes deleted!'
+					};
+				} catch (e) {
+					console.log(e)
+					return Boom.internal();
+				}
+			}
+		};
 	}
 }

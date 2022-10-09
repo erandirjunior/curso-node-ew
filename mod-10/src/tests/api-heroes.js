@@ -132,4 +132,48 @@ describe.only('Api Routes', function() {
 		assert.ok(statusCode === 200);
 		assert.deepEqual(data.message, 'Update hero failed!');
 	});
+
+	it('Delete /heroes', async () => {
+		let result = await app.inject({
+			method: 'GET',
+			url: `/heroes`
+		});
+
+		const [{_id}] = JSON.parse(result.payload);
+		result = await app.inject({
+			method: 'DELETE',
+			url: `/heroes/${_id}`
+		});
+		const data = JSON.parse(result.payload);
+		const statusCode = result.statusCode;
+
+		assert.ok(statusCode === 200);
+		assert.deepEqual(data.message, 'Hero deleted!');
+	
+	});
+
+	it('Delete /heroes fail', async () => {
+		const id = '6340aa5e8a48ab9c9ab49caa';
+		const result = await app.inject({
+			method: 'DELETE',
+			url: `/heroes/${id}`
+		});
+		const data = JSON.parse(result.payload);
+		const statusCode = result.statusCode;
+
+		assert.ok(statusCode === 200);
+		assert.deepEqual(data.message, 'Delete hero failed!');
+	});
+
+	/*it('Delete all', async () => {
+		const result = await app.inject({
+			method: 'DELETE',
+			url: `/heroes`
+		});
+		const data = JSON.parse(result.payload);
+		const statusCode = result.statusCode;
+
+		assert.ok(statusCode === 200);
+		assert.deepEqual(data.message, 'Heroes deleted!');
+	});*/
 });
