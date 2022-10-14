@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha.js -w"
+    "test": "nyc --reporter=html ./node_modules/mocha/bin/mocha.js ./src/tests --exit"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,7 @@
     "sequelize": "^6.23.1"
   },
   "devDependencies": {
-    "mocha": "^10.0.0"
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0"
   }
 }

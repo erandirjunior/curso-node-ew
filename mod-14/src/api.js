@@ -34,6 +34,8 @@ const Postgres = require('./db/strategy/postgres/postgres');
 const Schema = require('./db/strategy/postgres/schemas/user');
 
 
+const CoverageRoute = require('./routes/coverage-routes');
+
 function mapRoutes(instance, methods) {
 	return methods.map(method => instance[method]());
 }
@@ -98,7 +100,8 @@ async function main() {
 
 	app.route([
 		...mapRoutes(heroRoutes, HeroRoutes.methods()),
-		...mapRoutes(authRoutes, AuthRoutes.methods())
+		...mapRoutes(authRoutes, AuthRoutes.methods()),
+		...mapRoutes(new CoverageRoute(), CoverageRoute.methods())
 	]);
 	await app.start();
 	console.log('Server running in port:', app.info.port);
